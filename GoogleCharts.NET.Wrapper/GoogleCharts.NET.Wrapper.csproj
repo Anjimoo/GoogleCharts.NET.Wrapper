@@ -6,6 +6,7 @@
     <Company>OpenSource</Company>
     <Description>Google Charts Wrapper for .NET ASP.NET projects.
 </Description>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   

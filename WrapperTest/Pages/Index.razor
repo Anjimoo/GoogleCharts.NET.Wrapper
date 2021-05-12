@@ -2,7 +2,7 @@
 @using Microsoft.JSInterop;
 @inject IJSRuntime jsRuntime;
 
-@if (@Gantt == null || @Timeline == null)
+@if (@Gantt == null || @Timeline == null || !@Gantt.Drawn || !@Timeline.Drawn)
 {
 
 }
@@ -23,7 +23,7 @@ else
     public DataTable<DataTableGanttRow> Gantt { get; set; }
     public DataTable<DataTableTimeLineRow> Timeline { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Gantt = new DataTable<DataTableGanttRow>(jsRuntime);
 
@@ -72,17 +72,16 @@ else
             Dependencies = null
         });
 
-        //Gantt.SetOptions(400);
-        Gantt.DrawChart();
+        await Gantt.DrawChart();
 
-        Gantt.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
 
         Timeline = new DataTable<DataTableTimeLineRow>(jsRuntime);
+        await Timeline.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
 
-        Timeline.SetOptions(new TimelineOptions
+        await Timeline.SetOptions(new TimelineOptions
         {
             Height = 300,
-            Timeline = new Timeline { ColorByRowLabel = true, GroupByRowLabel = true, ShowBarLabels = true }
+            Timeline = new Timeline { ColorByRowLabel = true }
         });
 
         Timeline.AddRow(new DataTableTimeLineRow
@@ -114,9 +113,8 @@ else
             End = new DateTime(2014, 5, 20)
         });
 
-        Timeline.DrawChart();
-
-        return base.OnInitializedAsync();
+        await Timeline.DrawChart();
+        StateHasChanged();
     }
 
     [JSInvokable]

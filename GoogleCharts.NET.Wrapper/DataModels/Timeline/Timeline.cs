@@ -15,7 +15,7 @@ namespace GoogleCharts.NET.Wrapper.DataModels.Timeline
         /// Type: boolean
         /// Default: true
         /// </summary>
-        public bool GroupByRowLabel { get; set; }
+        public bool GroupByRowLabel { get; set; } = true;
 
         //public object RowLabelStyle { get; set; }
 
@@ -24,13 +24,13 @@ namespace GoogleCharts.NET.Wrapper.DataModels.Timeline
         /// Type: boolean
         /// Default: true
         /// </summary>
-        public bool ShowBarLabels { get; set; }
+        public bool ShowBarLabels { get; set; } = true;
         /// <summary>
         /// If set to false, omits row labels. The default is to show them.
         /// Type: boolean
         /// Default: true
         /// </summary>
-        public bool ShowRowLabels { get; set; }
+        public bool ShowRowLabels { get; set; } = true;
         /// <summary>
         /// Colors all bars the same. Specified as a hex value (e.g., '#8d8').
         /// Type: string

@@ -15,7 +15,7 @@ window.setFunctionName = (data) => {
 }
 
 window.drawGantt = (data) => {
-    google.charts.load("current", { packages : ["gantt"] });
+    google.charts.load("current", { packages: ["gantt"] });
     google.charts.setOnLoadCallback(drawGanttChart);
 
     function drawGanttChart() {
@@ -34,7 +34,7 @@ window.drawGantt = (data) => {
 
         for (var i = 0; i < data.length; i++) {
             receivedLine = [data[i].taskId, data[i].taskName, data[i].resource, new Date(data[i].startDate),
-                new Date(data[i].endDate), data[i].duration, data[i].percentComplete, data[i].dependencies];
+            new Date(data[i].endDate), data[i].duration, data[i].percentComplete, data[i].dependencies];
             receivedLines.push(receivedLine);
         }
 
@@ -47,7 +47,7 @@ window.drawGantt = (data) => {
         chart.draw(dt, ganttOptions);
 
         function ganttClicked(e) {
-            
+
             var selection = chart.getSelection();
             DotNet.invokeMethodAsync(selectEventName);
             DotNet.dispose();
@@ -84,8 +84,12 @@ window.drawTimeline = (data) => {
 
         google.visualization.events.addListener(chart, 'select', function (e) {
             var selected = chart.getSelection();
-            DotNet.invokeMethodAsync(selectEventName);
-            DotNet.dispose();
+            if (DotNet != null) {
+                DotNet.invokeMethodAsync(selectEventName);
+                DotNet = null;
+            } else {
+                console.error("DotNet reference is null");
+            }
         });
 
         chart.draw(dataTable, timelineOptions);
