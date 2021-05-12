@@ -1,0 +1,129 @@
+﻿@page "/"
+@using Microsoft.JSInterop;
+@inject IJSRuntime jsRuntime;
+
+@if (@Gantt == null || @Timeline == null)
+{
+
+}
+else
+{
+    <div style="margin-bottom: 50px">
+        <GoogleGanttChart GanttDataTable="@Gantt"></GoogleGanttChart>
+    </div>
+
+    <div style="margin-top: 50px">
+        <GoogleTimeline GanttDataTable="@Timeline"></GoogleTimeline>
+    </div>
+
+}
+
+
+@code{
+    public DataTable<DataTableGanttRow> Gantt { get; set; }
+    public DataTable<DataTableTimeLineRow> Timeline { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        Gantt = new DataTable<DataTableGanttRow>(jsRuntime);
+
+        Gantt.AddRow(new DataTableGanttRow
+        {
+            TaskId = "2014Spring",
+            TaskName = "Spring 2014",
+            Resource = "spring",
+            StartDate = new DateTime(2014, 2, 22),
+            EndDate = new DateTime(2014, 5, 20),
+            Duration = null,
+            PercentComplete = 100,
+            Dependencies = null
+        });
+        Gantt.AddRow(new DataTableGanttRow
+        {
+            TaskId = "2014Summer",
+            TaskName = "Summer 2014",
+            Resource = "summer",
+            StartDate = new DateTime(2014, 5, 21),
+            EndDate = new DateTime(2014, 8, 20),
+            Duration = null,
+            PercentComplete = 100,
+            Dependencies = null
+        });
+        Gantt.AddRow(new DataTableGanttRow
+        {
+            TaskId = "2015Summer",
+            TaskName = "Summer 2015",
+            Resource = "summer",
+            StartDate = new DateTime(2015, 5, 21),
+            EndDate = new DateTime(2015, 8, 20),
+            Duration = null,
+            PercentComplete = 100,
+            Dependencies = null
+        });
+        Gantt.AddRow(new DataTableGanttRow
+        {
+            TaskId = "2014Autumn",
+            TaskName = "Autumn 2014",
+            Resource = "autumn",
+            StartDate = new DateTime(2014, 8, 21),
+            EndDate = new DateTime(2014, 11, 20),
+            Duration = null,
+            PercentComplete = 100,
+            Dependencies = null
+        });
+
+        //Gantt.SetOptions(400);
+        Gantt.DrawChart();
+
+        Gantt.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
+
+        Timeline = new DataTable<DataTableTimeLineRow>(jsRuntime);
+
+        Timeline.SetOptions(new TimelineOptions
+        {
+            Height = 300,
+            Timeline = new Timeline { ColorByRowLabel = true, GroupByRowLabel = true, ShowBarLabels = true }
+        });
+
+        Timeline.AddRow(new DataTableTimeLineRow
+        {
+            Name = "Beginning JavaScript",
+            Room = "Magnolia Room",
+            Start = new DateTime(2014, 8, 21),
+            End = new DateTime(2014, 11, 20)
+        });
+        Timeline.AddRow(new DataTableTimeLineRow
+        {
+            Room = "Magnolia Room",
+            Name = "Intermediate JavaScript",
+            Start = new DateTime(2014, 5, 21),
+            End = new DateTime(2014, 8, 20)
+        });
+        Timeline.AddRow(new DataTableTimeLineRow
+        {
+            Room = "Willow Room",
+            Name = "Beginning Google Charts",
+            Start = new DateTime(2014, 6, 21),
+            End = new DateTime(2014, 9, 20)
+        });
+        Timeline.AddRow(new DataTableTimeLineRow
+        {
+            Room = "Willow Room",
+            Name = "Advanced Google Charts",
+            Start = new DateTime(2014, 3, 21),
+            End = new DateTime(2014, 5, 20)
+        });
+
+        Timeline.DrawChart();
+
+        return base.OnInitializedAsync();
+    }
+
+    [JSInvokable]
+    public void ShowAlert()
+    {
+
+    }
+
+
+}
