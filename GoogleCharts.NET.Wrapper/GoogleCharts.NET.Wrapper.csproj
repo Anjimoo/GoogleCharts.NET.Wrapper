@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,7 +6,8 @@
     <Company>OpenSource</Company>
     <Description>Google Charts Wrapper for .NET ASP.NET projects.
 </Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.5</Version>
+    <PackageReleaseNotes>Updated to MIT license</PackageReleaseNotes>
   </PropertyGroup>
 
   
