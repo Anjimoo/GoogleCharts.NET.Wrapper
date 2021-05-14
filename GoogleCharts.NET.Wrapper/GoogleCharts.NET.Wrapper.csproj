@@ -3,11 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Anton "AnJimoo" Ruvinsky</Authors>
-    <Company>OpenSource</Company>
+    <Company></Company>
     <Description>Google Charts Wrapper for .NET ASP.NET projects.
 </Description>
     <Version>1.0.5</Version>
     <PackageReleaseNotes>Updated to MIT license</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</RepositoryUrl>
   </PropertyGroup>
 
   
@@ -17,6 +20,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Nuget\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
