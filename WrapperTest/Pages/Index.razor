@@ -9,11 +9,11 @@
 else
 {
     <div style="margin-bottom: 50px">
-        <GoogleGanttChart GanttDataTable="@Gantt"></GoogleGanttChart>
+        <GoogleGanttChart Id="mygantt" GanttDataTable="@Gantt"></GoogleGanttChart>
     </div>
 
     <div style="margin-top: 50px">
-        <GoogleTimeline GanttDataTable="@Timeline"></GoogleTimeline>
+        <GoogleTimeline Id="mytimeline" GanttDataTable="@Timeline"></GoogleTimeline>
     </div>
 
 }
@@ -26,6 +26,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         Gantt = new DataTable<DataTableGanttRow>(jsRuntime);
+        await Gantt.SetChartId("mygantt");
 
         Gantt.AddRow(new DataTableGanttRow
         {
@@ -72,10 +73,13 @@ else
             Dependencies = null
         });
 
+        await Gantt.SetOptions(500);
+
         await Gantt.DrawChart();
 
 
         Timeline = new DataTable<DataTableTimeLineRow>(jsRuntime);
+        await Timeline.SetChartId("mytimeline");
         await Timeline.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
 
         await Timeline.SetOptions(new TimelineOptions

@@ -36,8 +36,8 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         /// <returns></returns>
         public async Task DrawChart()
         {
-            var type = dataTableRaws.First().GetType().ToString();
-            switch (type)
+            //var type = dataTableRaws.First().GetType().ToString();
+            switch (typeof(T).ToString())
             {
                 case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
                     await _jSRuntime.InvokeVoidAsync("drawGantt", dataTableRaws);
@@ -57,14 +57,14 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         /// <param name="options">Can be either of type GanttOptions or TimelineOptions</param>
         public async Task SetOptions(object options)
         {
-            var type = options.GetType().ToString();
-            switch (type)
+            //var type = options.GetType().ToString();
+            switch (typeof(T).ToString())
             {
-                case "GoogleCharts.NET.Wrapper.DataModels.Gantt.GanttOptions":
+                case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
                     await _jSRuntime.InvokeVoidAsync("setGanttOptions", options);
                     Drawn = true;
                     break;
-                case "GoogleCharts.NET.Wrapper.DataModels.Timeline.TimelineOptions":
+                case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
                     await _jSRuntime.InvokeVoidAsync("setTimelineOptions", options);
                     Drawn = true;
                     break;
@@ -83,6 +83,18 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         {
             Tuple<object, string, bool> data = new Tuple<object, string, bool>(obj, name, dispose);
             await _jSRuntime.InvokeVoidAsync("setFunctionName", data);
+        }
+
+        public async Task SetChartId(string id)
+        {
+            if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow")
+            {
+                await _jSRuntime.InvokeVoidAsync("setGanttId", id);
+            }
+            else if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow")
+            {
+                await _jSRuntime.InvokeVoidAsync("setTimelineId", id);
+            }
         }
     }
 }

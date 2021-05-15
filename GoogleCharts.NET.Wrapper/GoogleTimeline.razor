@@ -1,8 +1,10 @@
 ﻿@typeparam T
 
-<div id="timeline"></div>
+<div id="@Id"></div>
 
 @code {
     [Parameter]
     public DataTable<T> GanttDataTable { get; set; }
+    [Parameter]
+    public string Id { get; set; }
 }

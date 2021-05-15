@@ -3,15 +3,27 @@ var ganttOptions;
 var timelineOptions;
 var selectEventName;
 var DotNet;
+var ganttId;
+var timelineId;
 
 
 window.setGanttOptions = (data) => {
-    ganttOptions = data
+    ganttOptions = {
+        height: data
+    }
 }
 
 window.setFunctionName = (data) => {
     DotNet = data.item1;
     selectEventName = data.item2;
+}
+
+window.setGanttId = (data) => {
+    ganttId = data;
+}
+
+window.setTimelineId = (data) => {
+    timelineId = data;
 }
 
 window.drawGantt = (data) => {
@@ -40,7 +52,7 @@ window.drawGantt = (data) => {
 
         dt.addRows(receivedLines);
 
-        var chart = new google.visualization.Gantt(document.getElementById('gantt_chart'));
+        var chart = new google.visualization.Gantt(document.getElementById(ganttId));
 
         google.visualization.events.addListener(chart, 'select', ganttClicked)
 
@@ -64,7 +76,7 @@ window.drawTimeline = (data) => {
     google.charts.load("current", { packages: ["timeline"] });
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-        var container = document.getElementById('timeline');
+        var container = document.getElementById(timelineId);
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
