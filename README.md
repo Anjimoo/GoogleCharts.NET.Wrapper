@@ -4,7 +4,7 @@ This package is still on early stage of development.
 
 ## How to start :
 
-### 1. Add scripts to head :
+### 1. Add scripts to head of index.html:
 ```
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="/_content/GoogleCharts.NET.Wrapper/js/GoogleChartsWrapper.js"></script>
