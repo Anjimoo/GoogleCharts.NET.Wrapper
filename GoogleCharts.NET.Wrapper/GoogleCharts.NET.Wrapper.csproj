@@ -6,8 +6,10 @@
     <Company></Company>
     <Description>Google Charts Wrapper for .NET ASP.NET projects.
 </Description>
-    <Version>1.0.5</Version>
-    <PackageReleaseNotes>Updated to MIT license</PackageReleaseNotes>
+    <Version>1.0.7</Version>
+    <PackageReleaseNotes>Added onclick return value "name" of timeline chart.
+Added min and max values for timeline. (To change length of timeline) (hAxis class with minValue and maxValue properties)
+</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</RepositoryUrl>

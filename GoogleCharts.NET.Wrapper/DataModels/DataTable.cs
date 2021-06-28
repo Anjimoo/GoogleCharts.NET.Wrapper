@@ -82,7 +82,14 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         public async Task SetCallbackFunctionName(object obj, string name, bool dispose)
         {
             Tuple<object, string, bool> data = new Tuple<object, string, bool>(obj, name, dispose);
-            await _jSRuntime.InvokeVoidAsync("setFunctionName", data);
+            if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow")
+            {
+                await _jSRuntime.InvokeVoidAsync("setGanttFunctionName", data);
+            }
+            else if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow")
+            {
+                await _jSRuntime.InvokeVoidAsync("setTimelineFunctionName", data);
+            }
         }
 
         public async Task SetChartId(string id)

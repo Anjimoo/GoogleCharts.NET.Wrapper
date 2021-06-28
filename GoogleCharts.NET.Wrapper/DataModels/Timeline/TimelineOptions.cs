@@ -8,6 +8,7 @@ namespace GoogleCharts.NET.Wrapper.DataModels.Timeline
 {
     public class TimelineOptions
     {
+        public hAxis hAxis { get; set; }
         /// <summary>
         /// Whether the chart should alternate background color by row index (i.e., tint background color of even-indexed rows a darker hue). 
         /// If false, chart background will be one uniform color. If true, chart background will alternate tint by row index. (Note: active v51+)

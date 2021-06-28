@@ -2,7 +2,8 @@ var height;
 var ganttOptions;
 var timelineOptions;
 var selectEventName;
-var DotNet;
+var TimelineDotNet;
+var GanttDotNet;
 var ganttId;
 var timelineId;
 
@@ -13,8 +14,13 @@ window.setGanttOptions = (data) => {
     }
 }
 
-window.setFunctionName = (data) => {
-    DotNet = data.item1;
+window.setTimelineFunctionName = (data) => {
+    TimelineDotNet = data.item1;
+    selectEventName = data.item2;
+}
+
+window.setGanttFunctionName = (data) => {
+    GanttDotNet = data.item1;
     selectEventName = data.item2;
 }
 
@@ -61,14 +67,18 @@ window.drawGantt = (data) => {
         function ganttClicked(e) {
 
             var selection = chart.getSelection();
-            DotNet.invokeMethodAsync(selectEventName);
-            DotNet.dispose();
+            GanttDotNet.invokeMethodAsync(selectEventName);
+            GanttDotNet.dispose();
         }
     }
 }
 
 
 window.setTimelineOptions = (data) => {
+    if (data.hAxis != null && data.hAxis.minValue != null && data.hAxis.maxValue != null) {
+        data.hAxis.minValue = new Date(data.hAxis.minValue);
+        data.hAxis.maxValue = new Date(data.hAxis.maxValue);
+    }
     timelineOptions = data;
 }
 
@@ -95,10 +105,14 @@ window.drawTimeline = (data) => {
         dataTable.addRows(receivedLines);
 
         google.visualization.events.addListener(chart, 'select', function (e) {
+            var selct = e;
             var selected = chart.getSelection();
-            if (DotNet != null) {
-                DotNet.invokeMethodAsync(selectEventName);
-                DotNet = null;
+            for (var i = 0; i < selected.length; i++) {
+                var item = dataTable.getValue(selected[i].row, 1);
+            }
+            
+            if (TimelineDotNet != null) {
+                TimelineDotNet.invokeMethodAsync(selectEventName, item);
             } else {
                 console.error("DotNet reference is null");
             }
