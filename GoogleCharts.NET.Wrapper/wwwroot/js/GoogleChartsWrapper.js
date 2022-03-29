@@ -7,16 +7,21 @@ var GanttDotNet;
 var ganttId;
 var timelineId;
 
+var charts = {}; //dictionary where key = chartId and value = chart Object
+var chartsData = {}; //dictionary where key = chartId and value = chart data
+var chartsOptions = {}; //dictionary where key = chartId and value = chart Options object
+
+//common functions
+window.addChartOptions = (data) => {
+    chartsOptions[data.item1] = data.item2;
+}
+
+//Gantt
 
 window.setGanttOptions = (data) => {
     ganttOptions = {
         height: data
     }
-}
-
-window.setTimelineFunctionName = (data) => {
-    TimelineDotNet = data.item1;
-    selectEventName = data.item2;
 }
 
 window.setGanttFunctionName = (data) => {
@@ -28,11 +33,8 @@ window.setGanttId = (data) => {
     ganttId = data;
 }
 
-window.setTimelineId = (data) => {
-    timelineId = data;
-}
-
 window.drawGantt = (data) => {
+    chartsData[data.item1] = data.item2;
     google.charts.load("current", { packages: ["gantt"] });
     google.charts.setOnLoadCallback(drawGanttChart);
 
@@ -50,19 +52,23 @@ window.drawGantt = (data) => {
         let receivedLine;
         let receivedLines = [];
 
-        for (var i = 0; i < data.length; i++) {
-            receivedLine = [data[i].taskId, data[i].taskName, data[i].resource, new Date(data[i].startDate),
-            new Date(data[i].endDate), data[i].duration, data[i].percentComplete, data[i].dependencies];
+        for (var i = 0; i < chartsData[data.item1].length; i++) {
+            receivedLine = [chartsData[data.item1][i].taskId, chartsData[data.item1][i].taskName,
+                chartsData[data.item1][i].resource, new Date(chartsData[data.item1][i].startDate),
+                new Date(chartsData[data.item1][i].endDate), chartsData[data.item1][i].duration,
+                chartsData[data.item1][i].percentComplete, chartsData[data.item1][i].dependencies];
             receivedLines.push(receivedLine);
         }
 
         dt.addRows(receivedLines);
 
-        var chart = new google.visualization.Gantt(document.getElementById(ganttId));
-
+        var chart = new google.visualization.Gantt(document.getElementById(data.item1));
+        charts[data.item1] = chart;
         google.visualization.events.addListener(chart, 'select', ganttClicked)
-
-        chart.draw(dt, ganttOptions);
+        var options = {
+            height: 500
+        };
+        chart.draw(dt, options);
 
         function ganttClicked(e) {
 
@@ -73,6 +79,15 @@ window.drawGantt = (data) => {
     }
 }
 
+//Timeline
+window.setTimelineFunctionName = (data) => {
+    TimelineDotNet = data.item1;
+    selectEventName = data.item2;
+}
+
+window.setTimelineId = (data) => {
+    timelineId = data;
+}
 
 window.setTimelineOptions = (data) => {
     if (data.hAxis != null && data.hAxis.minValue != null && data.hAxis.maxValue != null) {
@@ -83,10 +98,11 @@ window.setTimelineOptions = (data) => {
 }
 
 window.drawTimeline = (data) => {
+    chartsData[data.item1] = data.item2;
     google.charts.load("current", { packages: ["timeline"] });
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-        var container = document.getElementById(timelineId);
+        var container = document.getElementById(data.item1);
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
@@ -98,19 +114,21 @@ window.drawTimeline = (data) => {
         let receivedLine;
         let receivedLines = [];
 
-        for (var i = 0; i < data.length; i++) {
-            receivedLine = [data[i].room, data[i].name, new Date(data[i].start), new Date(data[i].end)];
+        for (var i = 0; i < chartsData[data.item1].length; i++) {
+            receivedLine = [chartsData[data.item1][i].room, chartsData[data.item1][i].name,
+                new Date(chartsData[data.item1][i].start), new Date(chartsData[data.item1][i].end)];
             receivedLines.push(receivedLine);
         }
         dataTable.addRows(receivedLines);
 
+        charts[data.item1] = chart;
         google.visualization.events.addListener(chart, 'select', function (e) {
             var selct = e;
             var selected = chart.getSelection();
             for (var i = 0; i < selected.length; i++) {
                 var item = dataTable.getValue(selected[i].row, 1);
             }
-            
+
             if (TimelineDotNet != null) {
                 TimelineDotNet.invokeMethodAsync(selectEventName, item);
             } else {
@@ -118,6 +136,6 @@ window.drawTimeline = (data) => {
             }
         });
 
-        chart.draw(dataTable, timelineOptions);
+        chart.draw(dataTable, chartsOptions[data.item1]);
     }
 }

@@ -12,6 +12,7 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         private readonly IJSRuntime _jSRuntime;
 
         private List<T> dataTableRaws;
+        private string _id;
         /// <summary>
         /// returns true if chart was drawn
         /// </summary>
@@ -19,6 +20,13 @@ namespace GoogleCharts.NET.Wrapper.DataModels
 
         public DataTable(IJSRuntime jSRuntime)
         {
+            _jSRuntime = jSRuntime;
+            dataTableRaws = new List<T>();
+        }
+
+        public DataTable(IJSRuntime jSRuntime, string id)
+        {
+            _id = id;
             _jSRuntime = jSRuntime;
             dataTableRaws = new List<T>();
         }
@@ -34,23 +42,42 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         /// Draws chart and returns bool that represents if chat was drawn
         /// </summary>
         /// <returns></returns>
+        //public async Task DrawChart()
+        //{
+        //    //var type = dataTableRaws.First().GetType().ToString();
+        //    switch (typeof(T).ToString())
+        //    {
+        //        case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
+        //            await _jSRuntime.InvokeVoidAsync("drawGantt", dataTableRaws);
+        //            Drawn = true;
+        //            break;
+        //        case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
+        //            await _jSRuntime.InvokeVoidAsync("drawTimeline", dataTableRaws);
+        //            Drawn = true;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
         public async Task DrawChart()
         {
             //var type = dataTableRaws.First().GetType().ToString();
             switch (typeof(T).ToString())
             {
                 case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
-                    await _jSRuntime.InvokeVoidAsync("drawGantt", dataTableRaws);
+                    await _jSRuntime.InvokeVoidAsync("drawGantt", new Tuple<string, object>(_id, dataTableRaws));
                     Drawn = true;
                     break;
                 case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
-                    await _jSRuntime.InvokeVoidAsync("drawTimeline", dataTableRaws);
+                    await _jSRuntime.InvokeVoidAsync("drawTimeline", new Tuple<string, object>(_id, dataTableRaws));
                     Drawn = true;
                     break;
                 default:
                     break;
             }
         }
+
+
         /// <summary>
         /// Set options for specific chart
         /// </summary>
@@ -71,6 +98,16 @@ namespace GoogleCharts.NET.Wrapper.DataModels
                 default:
                     break;
             }
+        }
+
+        /// <summary>
+        /// Set options for specific chart
+        /// </summary>
+        /// <param name="options">Can be either of type GanttOptions or TimelineOptions</param>
+        public async Task AddOptions(object options)
+        {
+            //var type = options.GetType().ToString();
+            await _jSRuntime.InvokeVoidAsync("addChartOptions", new Tuple<string, object>(_id, options));
         }
 
         /// <summary>
