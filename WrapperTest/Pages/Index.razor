@@ -9,17 +9,17 @@
 else
 {
     <div style="margin-bottom: 50px">
-        <GoogleGanttChart Id="mygantt" GanttDataTable="@Gantt"></GoogleGanttChart>
+        <GoogleChart Id="mygantt" DataTable="@Gantt"></GoogleChart>
     </div>
     <div style="margin-top: 50px">
-        <GoogleTimeline Id="mytimeline" GanttDataTable="@Timeline"></GoogleTimeline>
+        <GoogleChart Id="mytimeline" DataTable="@Timeline"></GoogleChart>
     </div>
     <button @onclick="RedrawChart">REDRAW</button>
 }
 @if(@Timelinee != null)
 {
     <div style="margin-top: 50px">
-        <GoogleTimeline Id="mytimeline2" GanttDataTable="@Timelinee"></GoogleTimeline>
+        <GoogleChart Id="mytimeline2" DataTable="@Timelinee"></GoogleChart>
     </div>
 }
 
