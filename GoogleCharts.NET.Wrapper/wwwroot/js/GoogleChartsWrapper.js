@@ -139,3 +139,36 @@ window.drawTimeline = (data) => {
         chart.draw(dataTable, chartsOptions[data.item1]);
     }
 }
+
+window.drawColumnChart = (data) => {
+    chartsData[data.item1] = data.item2;
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var rows = [];
+        for (var i = 0; i < data.item2.length; i++) {
+            rows.push(data.item2[i].columnsValues)
+        }
+
+        var dataTable = google.visualization.arrayToDataTable(rows);
+        var options = {
+            title: "Density of Precious Metals, in g/cm^3",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        if (data.item1 === 'stacked') {
+            options = {
+                width: 600,
+                height: 400,
+                legend: { position: 'top', maxLines: 3 },
+                bar: { groupWidth: '75%' },
+                isStacked: true,
+            };
+        }
+        var chart = new google.visualization.ColumnChart(document.getElementById(data.item1));
+        chart.draw(dataTable, options);
+    }
+}

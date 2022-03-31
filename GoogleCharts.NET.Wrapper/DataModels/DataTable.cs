@@ -72,6 +72,10 @@ namespace GoogleCharts.NET.Wrapper.DataModels
                     await _jSRuntime.InvokeVoidAsync("drawTimeline", new Tuple<string, object>(_id, dataTableRaws));
                     Drawn = true;
                     break;
+                case "GoogleCharts.NET.Wrapper.DataModels.Column.DataTableColumnRow":
+                    await _jSRuntime.InvokeVoidAsync("drawColumnChart", new Tuple<string, object>(_id, dataTableRaws));
+                    Drawn = true;
+                    break;
                 default:
                     break;
             }

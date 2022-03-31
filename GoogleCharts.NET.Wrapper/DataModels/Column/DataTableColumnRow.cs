@@ -8,5 +8,6 @@ namespace GoogleCharts.NET.Wrapper.DataModels.Column
 {
     public class DataTableColumnRow
     {
+        public List<object> ColumnsValues { get; set; }
     }
 }
