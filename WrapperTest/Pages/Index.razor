@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using GoogleCharts.NET.Wrapper.DataModels.Common
 @using Microsoft.JSInterop;
 @inject IJSRuntime jsRuntime;
 
@@ -44,6 +45,15 @@ else
     protected override async Task OnInitializedAsync()
     {
         StackedColumnChart = new DataTable<DataTableColumnRow>(jsRuntime, "stacked");
+        await StackedColumnChart.AddOptions(new ColumnChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Stacked Chart",
+                Legend = new Legend { Position = "top", MaxLines = 3 },
+                Bar = new Bar { GroupWidth = "75%" },
+                IsStacked = true
+            });
         StackedColumnChart.AddRow(new DataTableColumnRow
             {
                 ColumnsValues = new List<object>
@@ -75,6 +85,14 @@ else
         await StackedColumnChart.DrawChart();
 
         ColumnChart = new DataTable<DataTableColumnRow>(jsRuntime, "mycolumn");
+        await ColumnChart.AddOptions(new ColumnChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Column Chart",
+                Bar = new Bar { GroupWidth = "95%" },
+                Legend = new Legend { Position = "none" }
+            });
         ColumnChart.AddRow(new DataTableColumnRow
             {
                 ColumnsValues = new List<object>
