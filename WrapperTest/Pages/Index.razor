@@ -1,134 +1,228 @@
 ﻿@page "/"
+@using GoogleCharts.NET.Wrapper.DataModels.Common
 @using Microsoft.JSInterop;
 @inject IJSRuntime jsRuntime;
 
-@if (@Gantt == null || @Timeline == null || !@Gantt.Drawn || !@Timeline.Drawn)
+@if (@Gantt == null)
 {
 
 }
 else
 {
     <div style="margin-bottom: 50px">
-        <GoogleGanttChart Id="mygantt" GanttDataTable="@Gantt"></GoogleGanttChart>
+        <GoogleChart Id="mygantt" DataTable="@Gantt"></GoogleChart>
     </div>
-
     <div style="margin-top: 50px">
-        <GoogleTimeline Id="mytimeline" GanttDataTable="@Timeline"></GoogleTimeline>
+        <GoogleChart Id="mytimeline" DataTable="@Timeline"></GoogleChart>
     </div>
-
     <button @onclick="RedrawChart">REDRAW</button>
-
+}
+@if (@ColumnChart != null)
+{
+    <div style="margin-top: 50px">
+        <GoogleChart Id="mycolumn" DataTable="@ColumnChart"></GoogleChart>
+    </div>
+}
+@if(@StackedColumnChart != null)
+{
+    <div style="margin-top: 50px">
+        <GoogleChart Id="stacked" DataTable="@StackedColumnChart"></GoogleChart>
+    </div>
+    
 }
 
 
-@code{
+@code {
     public DataTable<DataTableGanttRow> Gantt { get; set; }
     public DataTable<DataTableTimeLineRow> Timeline { get; set; }
-
+    public DataTable<DataTableColumnRow> ColumnChart { get; set; }
+    public DataTable<DataTableColumnRow> StackedColumnChart { get; set; }
     public async void RedrawChart()
     {
-        await Timeline.SetOptions(new TimelineOptions
-        {
-            Height = 300,
-            Timeline = new Timeline { ColorByRowLabel = true },
-            hAxis = new hAxis { MinValue = new DateTime(2012, 1, 1), MaxValue = new DateTime(2022, 1, 1) }
-        });
-        await Timeline.DrawChart();
+
     }
 
     protected override async Task OnInitializedAsync()
     {
-        Gantt = new DataTable<DataTableGanttRow>(jsRuntime);
-        await Gantt.SetChartId("mygantt");
+        StackedColumnChart = new DataTable<DataTableColumnRow>(jsRuntime, "stacked");
+        await StackedColumnChart.AddOptions(new ColumnChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Stacked Chart",
+                Legend = new Legend { Position = "top", MaxLines = 3 },
+                Bar = new Bar { GroupWidth = "75%" },
+                IsStacked = true
+            });
+        StackedColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Genre", "Fantasy & Sci Fi", "Romance", "Mystery/Crime", "General", "Western", "Literature", new { role = "annotation" }
+                }
+            });
+        StackedColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "2010", 10, 24, 20, 32, 18, 5, ""
+                }
+            });
+        StackedColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "2020", 16, 22, 23, 30, 16, 9, ""
+                }
+            });
+        StackedColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "2030", 28, 19, 29, 30, 12, 13, ""
+                }
+            });
+        await StackedColumnChart.DrawChart();
+
+        ColumnChart = new DataTable<DataTableColumnRow>(jsRuntime, "mycolumn");
+        await ColumnChart.AddOptions(new ColumnChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Column Chart",
+                Bar = new Bar { GroupWidth = "95%" },
+                Legend = new Legend { Position = "none" }
+            });
+        ColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Element", "Density", new { role = "style" }
+                }
+            });
+        ColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Copper", 8.94, "#b87333"
+                }
+            });
+        ColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Silver", 10.49, "silver"
+                }
+            });
+        ColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Gold", 19.30, "gold"
+                }
+            });
+        ColumnChart.AddRow(new DataTableColumnRow
+            {
+                ColumnsValues = new List<object>
+                {
+                    "Platinum", 21.45, "color: #e5e4e2"
+                }
+            });
+
+        await ColumnChart.DrawChart();
+        //new DataTable constractor with chart id provided instead of providing it with SetChartId function
+        Gantt = new DataTable<DataTableGanttRow>(jsRuntime, "mygantt");
+        //Gantt = new DataTable<DataTableGanttRow>(jsRuntime);
+        //await Gantt.SetChartId("mygantt");
 
         Gantt.AddRow(new DataTableGanttRow
-        {
-            TaskId = "2014Spring",
-            TaskName = "Spring 2014",
-            Resource = "spring",
-            StartDate = new DateTime(2014, 2, 22),
-            EndDate = new DateTime(2014, 5, 20),
-            Duration = null,
-            PercentComplete = 100,
-            Dependencies = null
-        });
+            {
+                TaskId = "2014Spring",
+                TaskName = "Spring 2014",
+                Resource = "spring",
+                StartDate = new DateTime(2014, 2, 22),
+                EndDate = new DateTime(2014, 5, 20),
+                Duration = null,
+                PercentComplete = 100,
+                Dependencies = null
+            });
         Gantt.AddRow(new DataTableGanttRow
-        {
-            TaskId = "2014Summer",
-            TaskName = "Summer 2014",
-            Resource = "summer",
-            StartDate = new DateTime(2014, 5, 21),
-            EndDate = new DateTime(2014, 8, 20),
-            Duration = null,
-            PercentComplete = 100,
-            Dependencies = null
-        });
+            {
+                TaskId = "2014Summer",
+                TaskName = "Summer 2014",
+                Resource = "summer",
+                StartDate = new DateTime(2014, 5, 21),
+                EndDate = new DateTime(2014, 8, 20),
+                Duration = null,
+                PercentComplete = 100,
+                Dependencies = null
+            });
         Gantt.AddRow(new DataTableGanttRow
-        {
-            TaskId = "2015Summer",
-            TaskName = "Summer 2015",
-            Resource = "summer",
-            StartDate = new DateTime(2015, 5, 21),
-            EndDate = new DateTime(2015, 8, 20),
-            Duration = null,
-            PercentComplete = 100,
-            Dependencies = null
-        });
+            {
+                TaskId = "2015Summer",
+                TaskName = "Summer 2015",
+                Resource = "summer",
+                StartDate = new DateTime(2015, 5, 21),
+                EndDate = new DateTime(2015, 8, 20),
+                Duration = null,
+                PercentComplete = 100,
+                Dependencies = null
+            });
         Gantt.AddRow(new DataTableGanttRow
-        {
-            TaskId = "2014Autumn",
-            TaskName = "Autumn 2014",
-            Resource = "autumn",
-            StartDate = new DateTime(2014, 8, 21),
-            EndDate = new DateTime(2014, 11, 20),
-            Duration = null,
-            PercentComplete = 100,
-            Dependencies = null
-        });
+            {
+                TaskId = "2014Autumn",
+                TaskName = "Autumn 2014",
+                Resource = "autumn",
+                StartDate = new DateTime(2014, 8, 21),
+                EndDate = new DateTime(2014, 11, 20),
+                Duration = null,
+                PercentComplete = 100,
+                Dependencies = null
+            });
 
-        await Gantt.SetOptions(500);
+        //await Gantt.SetOptions(500);
 
         await Gantt.DrawChart();
 
 
-        Timeline = new DataTable<DataTableTimeLineRow>(jsRuntime);
-        await Timeline.SetChartId("mytimeline");
-        await Timeline.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
+        Timeline = new DataTable<DataTableTimeLineRow>(jsRuntime, "mytimeline");
+        //await Timeline.SetChartId("mytimeline");
+        //await Timeline.SetCallbackFunctionName(DotNetObjectReference.Create(this), "ShowAlert", true);
 
-        await Timeline.SetOptions(new TimelineOptions
-        {
-            Height = 300,
-            Timeline = new Timeline { ColorByRowLabel = true }
-        });
+        await Timeline.AddOptions(new TimelineOptions
+            {
+                Height = 300,
+                Timeline = new Timeline { ColorByRowLabel = true }
+            });
 
         Timeline.AddRow(new DataTableTimeLineRow
-        {
-            Name = "Beginning JavaScript",
-            Room = "Magnolia Room",
-            Start = new DateTime(2014, 8, 21),
-            End = new DateTime(2014, 11, 20)
-        });
+            {
+                Name = "Beginning JavaScript",
+                Room = "Magnolia Room",
+                Start = new DateTime(2014, 8, 21),
+                End = new DateTime(2014, 11, 20)
+            });
         Timeline.AddRow(new DataTableTimeLineRow
-        {
-            Room = "Magnolia Room",
-            Name = "Intermediate JavaScript",
-            Start = new DateTime(2014, 5, 21),
-            End = new DateTime(2014, 8, 20)
-        });
+            {
+                Room = "Magnolia Room",
+                Name = "Intermediate JavaScript",
+                Start = new DateTime(2014, 5, 21),
+                End = new DateTime(2014, 8, 20)
+            });
         Timeline.AddRow(new DataTableTimeLineRow
-        {
-            Room = "Willow Room",
-            Name = "Beginning Google Charts",
-            Start = new DateTime(2014, 6, 21),
-            End = new DateTime(2014, 9, 20)
-        });
+            {
+                Room = "Willow Room",
+                Name = "Beginning Google Charts",
+                Start = new DateTime(2014, 6, 21),
+                End = new DateTime(2014, 9, 20)
+            });
         Timeline.AddRow(new DataTableTimeLineRow
-        {
-            Room = "Willow Room",
-            Name = "Advanced Google Charts",
-            Start = new DateTime(2014, 3, 21),
-            End = new DateTime(2014, 5, 20)
-        });
+            {
+                Room = "Willow Room",
+                Name = "Advanced Google Charts",
+                Start = new DateTime(2014, 3, 21),
+                End = new DateTime(2014, 5, 20)
+            });
 
         await Timeline.DrawChart();
         StateHasChanged();

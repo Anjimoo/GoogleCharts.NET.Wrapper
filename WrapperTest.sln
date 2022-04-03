@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrapperTest", "WrapperTest\WrapperTest.csproj", "{46257C79-C2E2-4E99-864A-6E1374142AF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrapperTest", "WrapperTest\WrapperTest.csproj", "{46257C79-C2E2-4E99-864A-6E1374142AF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCharts.NET.Wrapper", "GoogleCharts.NET.Wrapper\GoogleCharts.NET.Wrapper.csproj", "{24CF1777-ED77-4EAD-A91E-F7D0F5C40FD4}"
 EndProject
