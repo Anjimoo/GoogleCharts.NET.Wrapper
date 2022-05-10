@@ -15,7 +15,6 @@ else
     <div style="margin-top: 50px">
         <GoogleChart Id="mytimeline" DataTable="@Timeline"></GoogleChart>
     </div>
-    <button @onclick="RedrawChart">REDRAW</button>
 }
 @if (@ColumnChart != null)
 {
@@ -37,10 +36,6 @@ else
     public DataTable<DataTableTimeLineRow> Timeline { get; set; }
     public DataTable<DataTableColumnRow> ColumnChart { get; set; }
     public DataTable<DataTableColumnRow> StackedColumnChart { get; set; }
-    public async void RedrawChart()
-    {
-
-    }
 
     protected override async Task OnInitializedAsync()
     {

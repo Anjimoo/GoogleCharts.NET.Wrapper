@@ -38,27 +38,7 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         {
             dataTableRaws.Add(row);
         }
-        /// <summary>
-        /// Draws chart and returns bool that represents if chat was drawn
-        /// </summary>
-        /// <returns></returns>
-        //public async Task DrawChart()
-        //{
-        //    //var type = dataTableRaws.First().GetType().ToString();
-        //    switch (typeof(T).ToString())
-        //    {
-        //        case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
-        //            await _jSRuntime.InvokeVoidAsync("drawGantt", dataTableRaws);
-        //            Drawn = true;
-        //            break;
-        //        case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
-        //            await _jSRuntime.InvokeVoidAsync("drawTimeline", dataTableRaws);
-        //            Drawn = true;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
+      
         public async Task DrawChart()
         {
             //var type = dataTableRaws.First().GetType().ToString();
@@ -80,7 +60,6 @@ namespace GoogleCharts.NET.Wrapper.DataModels
                     break;
             }
         }
-
 
         /// <summary>
         /// Set options for specific chart
@@ -130,18 +109,6 @@ namespace GoogleCharts.NET.Wrapper.DataModels
             else if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow")
             {
                 await _jSRuntime.InvokeVoidAsync("setTimelineFunctionName", data);
-            }
-        }
-
-        public async Task SetChartId(string id)
-        {
-            if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow")
-            {
-                await _jSRuntime.InvokeVoidAsync("setGanttId", id);
-            }
-            else if (typeof(T).ToString() == "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow")
-            {
-                await _jSRuntime.InvokeVoidAsync("setTimelineId", id);
             }
         }
     }
