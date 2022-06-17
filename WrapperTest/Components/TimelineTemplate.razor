@@ -1,0 +1,59 @@
+﻿@using GoogleCharts.NET.Wrapper.DataModels.Common
+@using Microsoft.JSInterop;
+@inject IJSRuntime jsRuntime;
+
+<h3>TimelineTemplate</h3>
+
+@if (@Timeline != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@Timeline"></GoogleChart>
+	</div>
+}
+
+@code {
+	public DataTable<DataTableTimeLineRow> Timeline { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Timeline = await DataTable<DataTableTimeLineRow>.CreateAsync(jsRuntime, "mytimeline");
+
+		await Timeline.AddOptions(new TimelineOptions
+			{
+				Height = 300,
+				Timeline = new Timeline { ColorByRowLabel = true }
+			});
+
+		Timeline.AddRow(new DataTableTimeLineRow
+			{
+				Name = "Beginning JavaScript",
+				Room = "Magnolia Room",
+				Start = new DateTime(2014, 8, 21),
+				End = new DateTime(2014, 11, 20)
+			});
+		Timeline.AddRow(new DataTableTimeLineRow
+			{
+				Room = "Magnolia Room",
+				Name = "Intermediate JavaScript",
+				Start = new DateTime(2014, 5, 21),
+				End = new DateTime(2014, 8, 20)
+			});
+		Timeline.AddRow(new DataTableTimeLineRow
+			{
+				Room = "Willow Room",
+				Name = "Beginning Google Charts",
+				Start = new DateTime(2014, 6, 21),
+				End = new DateTime(2014, 9, 20)
+			});
+		Timeline.AddRow(new DataTableTimeLineRow
+			{
+				Room = "Willow Room",
+				Name = "Advanced Google Charts",
+				Start = new DateTime(2014, 3, 21),
+				End = new DateTime(2014, 5, 20)
+			});
+
+		await Timeline.DrawChart();
+	}
+
+}
