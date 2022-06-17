@@ -32,6 +32,12 @@ namespace GoogleCharts.NET.Wrapper.DataModels
             dataTableRaws = new List<T>();
         }
 
+        /// <summary>
+        /// Creates instance of DataTable with specified chart Type.
+        /// </summary>
+        /// <param name="jSRuntime"></param>
+        /// <param name="id">Chart ID</param>
+        /// <returns></returns>
         public static Task<DataTable<T>> CreateAsync(IJSRuntime jSRuntime, string id)
         {
             var ret = new DataTable<T>(jSRuntime, id);
