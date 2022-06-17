@@ -1,10 +1,8 @@
 ﻿@typeparam T
 
-<div id="@Id"></div>
+<div id="@DataTable.Id"></div>
 
 @code {
     [Parameter]
     public DataTable<T> DataTable { get; set; }
-    [Parameter]
-    public string Id { get; set; }
 }

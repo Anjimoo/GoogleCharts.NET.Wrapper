@@ -1,174 +1,154 @@
-var height;
-var ganttOptions;
-var timelineOptions;
-var selectEventName;
-var TimelineDotNet;
-var GanttDotNet;
-var ganttId;
-var timelineId;
-
 var charts = {}; //dictionary where key = chartId and value = chart Object
-var chartsData = {}; //dictionary where key = chartId and value = chart data
-var chartsOptions = {}; //dictionary where key = chartId and value = chart Options object
 
-//common functions
-window.addChartOptions = (data) => {
-    chartsOptions[data.item1] = data.item2;
-}
+class Chart {
 
-//Gantt
+    options = {};
+    chart;
+    functionName;
+    dotNetInstance;
+    selectEventName;
+    disposeDotNet;
+    data = {};
 
-window.setGanttOptions = (data) => {
-    ganttOptions = {
-        height: data
+    constructor(id){
+        this.id = id;
     }
 }
 
-window.setGanttFunctionName = (data) => {
-    GanttDotNet = data.item1;
-    selectEventName = data.item2;
+window.createChart = (id) => {
+    charts[id] = new Chart(id);
 }
 
-window.setGanttId = (data) => {
-    ganttId = data;
-}
+window.addChartOptions = (data) => {
+    charts[data.item1].options = data.item2;
+};
 
+window.setFunctionName = (data) => {
+    charts[data.item1].dotNetInstance = data.item2;
+    charts[data.item1].selectEventName = data.item3;
+    charts[data.item1].disposeDotNet = data.item4;
+};
+
+//Gantt
 window.drawGantt = (data) => {
-    chartsData[data.item1] = data.item2;
+    var chartId = data.item1;
+    charts[chartId].data = data.item2;
     google.charts.load("current", { packages: ["gantt"] });
     google.charts.setOnLoadCallback(drawGanttChart);
 
     function drawGanttChart() {
         var dt = new google.visualization.DataTable();
-        dt.addColumn('string', 'Task ID');
-        dt.addColumn('string', 'Task Name');
-        dt.addColumn('string', 'Resource');
-        dt.addColumn('date', 'Start Date');
-        dt.addColumn('date', 'End Date');
-        dt.addColumn('number', 'Duration');
-        dt.addColumn('number', 'Percent Complete');
-        dt.addColumn('string', 'Dependencies');
+        dt.addColumn("string", "Task ID");
+        dt.addColumn("string", "Task Name");
+        dt.addColumn("string", "Resource");
+        dt.addColumn("date", "Start Date");
+        dt.addColumn("date", "End Date");
+        dt.addColumn("number", "Duration");
+        dt.addColumn("number", "Percent Complete");
+        dt.addColumn("string", "Dependencies");
 
         let receivedLine;
         let receivedLines = [];
 
-        for (var i = 0; i < chartsData[data.item1].length; i++) {
-            receivedLine = [chartsData[data.item1][i].taskId, chartsData[data.item1][i].taskName,
-                chartsData[data.item1][i].resource, new Date(chartsData[data.item1][i].startDate),
-                new Date(chartsData[data.item1][i].endDate), chartsData[data.item1][i].duration,
-                chartsData[data.item1][i].percentComplete, chartsData[data.item1][i].dependencies];
+        charts[chartId].data.forEach((item) => {
+            let startDate = new Date(item.startDate);
+            let endDate = new Date(item.endDate);
+            receivedLine = [
+                item.taskId,
+                item.taskName,
+                item.resource,
+                startDate,
+                endDate,
+                item.duration,
+                item.percentComplete,
+                item.dependencies,
+            ];
             receivedLines.push(receivedLine);
-        }
+        });
 
         dt.addRows(receivedLines);
 
-        var chart = new google.visualization.Gantt(document.getElementById(data.item1));
-        charts[data.item1] = chart;
-        google.visualization.events.addListener(chart, 'select', ganttClicked)
-        var options = {
-            height: 500
-        };
-        chart.draw(dt, options);
+        var chart = new google.visualization.Gantt(
+            document.getElementById(chartId)
+        );
+        charts[chartId].chart = chart;
+        google.visualization.events.addListener(chart, "select", ganttClicked);
+
+        chart.draw(dt, charts[chartId].options);
 
         function ganttClicked(e) {
-
-            var selection = chart.getSelection();
-            GanttDotNet.invokeMethodAsync(selectEventName);
-            GanttDotNet.dispose();
+            charts[chartId].dotNetInstance.invokeMethodAsync(charts[chartId].selectEventName);
+            //charts[chartId].dotNetInstance.dispose();
         }
     }
-}
+};
 
 //Timeline
-window.setTimelineFunctionName = (data) => {
-    TimelineDotNet = data.item1;
-    selectEventName = data.item2;
-}
-
-window.setTimelineId = (data) => {
-    timelineId = data;
-}
-
-window.setTimelineOptions = (data) => {
-    if (data.hAxis != null && data.hAxis.minValue != null && data.hAxis.maxValue != null) {
-        data.hAxis.minValue = new Date(data.hAxis.minValue);
-        data.hAxis.maxValue = new Date(data.hAxis.maxValue);
-    }
-    timelineOptions = data;
-}
-
 window.drawTimeline = (data) => {
-    chartsData[data.item1] = data.item2;
+    var chartId = data.item1;
+    charts[chartId].data = data.item2;
     google.charts.load("current", { packages: ["timeline"] });
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
-        var container = document.getElementById(data.item1);
+        var container = document.getElementById(chartId);
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
-        dataTable.addColumn({ type: 'string', id: 'Room' });
-        dataTable.addColumn({ type: 'string', id: 'Name' });
-        dataTable.addColumn({ type: 'date', id: 'Start' });
-        dataTable.addColumn({ type: 'date', id: 'End' });
+        dataTable.addColumn({ type: "string", id: "Room" });
+        dataTable.addColumn({ type: "string", id: "Name" });
+        dataTable.addColumn({ type: "date", id: "Start" });
+        dataTable.addColumn({ type: "date", id: "End" });
 
         let receivedLine;
         let receivedLines = [];
 
-        for (var i = 0; i < chartsData[data.item1].length; i++) {
-            receivedLine = [chartsData[data.item1][i].room, chartsData[data.item1][i].name,
-                new Date(chartsData[data.item1][i].start), new Date(chartsData[data.item1][i].end)];
+        charts[data.item1].data.forEach((item) => {
+            receivedLine = [
+                item.room,
+                item.name,
+                new Date(item.start),
+                new Date(item.end),
+            ];
             receivedLines.push(receivedLine);
-        }
+        });
+
         dataTable.addRows(receivedLines);
 
-        charts[data.item1] = chart;
-        google.visualization.events.addListener(chart, 'select', function (e) {
-            var selct = e;
+        charts[chartId].chart = chart;
+        google.visualization.events.addListener(chart, "select", function (e) {
             var selected = chart.getSelection();
             for (var i = 0; i < selected.length; i++) {
                 var item = dataTable.getValue(selected[i].row, 1);
             }
 
-            if (TimelineDotNet != null) {
-                TimelineDotNet.invokeMethodAsync(selectEventName, item);
+            if (charts[chartId].dotNetInstance != null) {
+                charts[chartId].dotNetInstance.invokeMethodAsync(charts[chartId].selectEventName, item);
             } else {
                 console.error("DotNet reference is null");
             }
         });
 
-        chart.draw(dataTable, chartsOptions[data.item1]);
+        chart.draw(dataTable, charts[chartId].options);
     }
-}
+};
 
+//Columns Chart
 window.drawColumnChart = (data) => {
-    chartsData[data.item1] = data.item2;
-    google.charts.load('current', { packages: ['corechart'] });
+    charts[data.item1].data = data.item2;
+    google.charts.load("current", { packages: ["corechart"] });
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
         var rows = [];
         for (var i = 0; i < data.item2.length; i++) {
-            rows.push(data.item2[i].columnsValues)
+            rows.push(data.item2[i].columnsValues);
         }
 
         var dataTable = google.visualization.arrayToDataTable(rows);
-        //var options = {
-        //    title: "Density of Precious Metals, in g/cm^3",
-        //    width: 600,
-        //    height: 400,
-        //    bar: { groupWidth: "95%" },
-        //    legend: { position: "none" },
-        //};
-        //if (data.item1 === 'stacked') {
-        //    options = {
-        //        width: 600,
-        //        height: 400,
-        //        legend: { position: 'top', maxLines: 3 },
-        //        bar: { groupWidth: '75%' },
-        //        isStacked: true,
-        //    };
-        //}
-        var chart = new google.visualization.ColumnChart(document.getElementById(data.item1));
-        chart.draw(dataTable, chartsOptions[data.item1]);
+
+        var chart = new google.visualization.ColumnChart(
+            document.getElementById(data.item1)
+        );
+        chart.draw(dataTable, charts[data.item1].options);
     }
-}
+};

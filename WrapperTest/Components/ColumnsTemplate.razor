@@ -1,0 +1,116 @@
+﻿@using GoogleCharts.NET.Wrapper.DataModels.Common
+@using Microsoft.JSInterop;
+@inject IJSRuntime jsRuntime;
+
+<h3>ColumnsTemplate</h3>
+
+@if (@ColumnChart != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@ColumnChart"></GoogleChart>
+	</div>
+}
+@if (@StackedColumnChart != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@StackedColumnChart"></GoogleChart>
+	</div>
+}
+
+@code {
+	public DataTable<DataTableColumnRow> ColumnChart { get; set; }
+	public DataTable<DataTableColumnRow> StackedColumnChart { get; set; }
+	
+	protected override async Task OnInitializedAsync()
+	{
+		StackedColumnChart = await DataTable<DataTableColumnRow>.CreateAsync(jsRuntime, "stacked");
+		await StackedColumnChart.AddOptions(new ColumnChartOptions
+			{
+				Height = 400,
+				Width = 600,
+				Title = "My Stacked Chart",
+				Legend = new Legend { Position = "top", MaxLines = 3 },
+				Bar = new Bar { GroupWidth = "75%" },
+				IsStacked = true
+			});
+		StackedColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Genre", "Fantasy & Sci Fi", "Romance", "Mystery/Crime", "General", "Western", "Literature", new { role = "annotation" }
+				}
+			});
+		StackedColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"2010", 10, 24, 20, 32, 18, 5, ""
+				}
+			});
+		StackedColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"2020", 16, 22, 23, 30, 16, 9, ""
+				}
+			});
+		StackedColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"2030", 28, 19, 29, 30, 12, 13, ""
+				}
+			});
+		await StackedColumnChart.DrawChart();
+
+		ColumnChart = await DataTable<DataTableColumnRow>.CreateAsync(jsRuntime, "mycolumn");
+		await ColumnChart.AddOptions(new ColumnChartOptions
+			{
+				Height = 400,
+				Width = 600,
+				Title = "My Column Chart",
+				Bar = new Bar { GroupWidth = "95%" },
+				Legend = new Legend { Position = "none" }
+			});
+		ColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Element", "Density", new { role = "style" }
+				}
+			});
+		ColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Copper", 8.94, "#b87333"
+				}
+			});
+		ColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Silver", 10.49, "silver"
+				}
+			});
+		ColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Gold", 19.30, "gold"
+				}
+			});
+		ColumnChart.AddRow(new DataTableColumnRow
+			{
+				ColumnsValues = new List<object>
+				{
+					"Platinum", 21.45, "color: #e5e4e2"
+				}
+			});
+
+		await ColumnChart.DrawChart();
+
+
+		StateHasChanged();
+	}
+}
