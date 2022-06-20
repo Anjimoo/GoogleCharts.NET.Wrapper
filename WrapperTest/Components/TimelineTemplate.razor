@@ -18,6 +18,11 @@
 	{
 		Timeline = await DataTable<DataTableTimeLineRow>.CreateAsync(jsRuntime, "mytimeline");
 
+		Timeline.AddColumn("string", "Room");
+		Timeline.AddColumn("string", "Name");
+		Timeline.AddColumn("date", "Start");
+		Timeline.AddColumn("date", "End");
+
 		await Timeline.AddOptions(new TimelineOptions
 			{
 				Height = 300,
@@ -26,29 +31,29 @@
 
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Name = "Beginning JavaScript",
-				Room = "Magnolia Room",
+				BarName = "Beginning JavaScript",
+				LineName = "Magnolia Room",
 				Start = new DateTime(2014, 8, 21),
 				End = new DateTime(2014, 11, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Magnolia Room",
-				Name = "Intermediate JavaScript",
+				LineName = "Magnolia Room",
+				BarName = "Intermediate JavaScript",
 				Start = new DateTime(2014, 5, 21),
 				End = new DateTime(2014, 8, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Willow Room",
-				Name = "Beginning Google Charts",
+				LineName = "Willow Room",
+				BarName = "Beginning Google Charts",
 				Start = new DateTime(2014, 6, 21),
 				End = new DateTime(2014, 9, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Willow Room",
-				Name = "Advanced Google Charts",
+				LineName = "Willow Room",
+				BarName = "Advanced Google Charts",
 				Start = new DateTime(2014, 3, 21),
 				End = new DateTime(2014, 5, 20)
 			});

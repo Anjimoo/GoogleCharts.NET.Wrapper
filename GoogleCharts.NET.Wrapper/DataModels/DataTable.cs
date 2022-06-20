@@ -11,7 +11,8 @@ namespace GoogleCharts.NET.Wrapper.DataModels
     {
         private IJSRuntime _jSRuntime;
 
-        private List<T> dataTableRaws;
+        private List<T> _dataTableRaws;
+        private List<Tuple<string, string>> _dataTableColumns;
         private string _id;
         public string Id
         {
@@ -29,7 +30,8 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         {
             _id = id;
             _jSRuntime = jSRuntime;
-            dataTableRaws = new List<T>();
+            _dataTableRaws = new List<T>();
+            _dataTableColumns = new List<Tuple<string, string>>();
         }
 
         /// <summary>
@@ -56,7 +58,17 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         /// <param name="row"></param>
         public void AddRow(T row)
         {
-            dataTableRaws.Add(row);
+            _dataTableRaws.Add(row);
+        }
+
+        /// <summary>
+        /// Adds new column to DataTable. (Check official documentation of Google Charts to know which columns are supported)
+        /// </summary>
+        /// <param name="type">Type of a column</param>
+        /// <param name="id">Id of a column</param>
+        public void AddColumn(string type, string id)
+        {
+            _dataTableColumns.Add(new Tuple<string, string>(type, id));
         }
 
         public async Task DrawChart()
@@ -65,15 +77,15 @@ namespace GoogleCharts.NET.Wrapper.DataModels
             switch (typeof(T).ToString())
             {
                 case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
-                    await _jSRuntime.InvokeVoidAsync("drawGantt", new Tuple<string, object>(_id, dataTableRaws));
+                    await _jSRuntime.InvokeVoidAsync("drawGantt", new Tuple<string, object, object>(_id, _dataTableRaws, _dataTableColumns));
                     Drawn = true;
                     break;
                 case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
-                    await _jSRuntime.InvokeVoidAsync("drawTimeline", new Tuple<string, object>(_id, dataTableRaws));
+                    await _jSRuntime.InvokeVoidAsync("drawTimeline", new Tuple<string, object, object>(_id, _dataTableRaws, _dataTableColumns));
                     Drawn = true;
                     break;
                 case "GoogleCharts.NET.Wrapper.DataModels.Column.DataTableColumnRow":
-                    await _jSRuntime.InvokeVoidAsync("drawColumnChart", new Tuple<string, object>(_id, dataTableRaws));
+                    await _jSRuntime.InvokeVoidAsync("drawColumnChart", new Tuple<string, object, object>(_id, _dataTableRaws, _dataTableColumns));
                     Drawn = true;
                     break;
                 default:

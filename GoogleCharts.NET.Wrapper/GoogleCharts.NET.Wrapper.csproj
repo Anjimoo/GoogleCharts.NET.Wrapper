@@ -7,18 +7,8 @@
     <Description>
       Google Charts Wrapper for Blazor/ASP.NET Core projects
     </Description>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <PackageReleaseNotes>
-      Breaking changes:
-      1. Instance of DataTable now is created via DataTable.CreateAsync method.
-      2. SetChartId is deleted. (id now must be provided to CreateAsync method)
-      3. GanttChart, TimelineChart components are replaced with GoogleChart component.
-
-      New features:
-      1. .NET 6 compatible.
-      2. Added Columns chart.
-      3. Added GanttOptions, TimelineOptions and ColumnsOptions
-      4. Now supports multiple charts of same type.
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</RepositoryUrl>

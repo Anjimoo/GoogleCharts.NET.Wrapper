@@ -38,6 +38,10 @@ window.drawGantt = (data) => {
 
     function drawGanttChart() {
         var dt = new google.visualization.DataTable();
+
+        //data.item3.forEach((item) => {
+        //    dt.addColumn({ type: item.item1, id: item.item2 });
+        //});
         dt.addColumn("string", "Task ID");
         dt.addColumn("string", "Task Name");
         dt.addColumn("string", "Resource");
@@ -94,18 +98,17 @@ window.drawTimeline = (data) => {
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
-        dataTable.addColumn({ type: "string", id: "Room" });
-        dataTable.addColumn({ type: "string", id: "Name" });
-        dataTable.addColumn({ type: "date", id: "Start" });
-        dataTable.addColumn({ type: "date", id: "End" });
+        data.item3.forEach((item) => {
+            dataTable.addColumn({ type: item.item1, id: item.item2 });
+        });
 
         let receivedLine;
         let receivedLines = [];
 
         charts[data.item1].data.forEach((item) => {
             receivedLine = [
-                item.room,
-                item.name,
+                item.lineName,
+                item.barName,
                 new Date(item.start),
                 new Date(item.end),
             ];
