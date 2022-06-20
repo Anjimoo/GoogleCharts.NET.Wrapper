@@ -9,10 +9,15 @@
 	<div style="margin-top: 50px">
 		<GoogleChart DataTable="@Timeline"></GoogleChart>
 	</div>
+
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@TimelineWith3Columns"></GoogleChart>
+	</div>
 }
 
 @code {
 	public DataTable<DataTableTimeLineRow> Timeline { get; set; }
+	public DataTable<DataTableTimeLineRow> TimelineWith3Columns { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -59,6 +64,44 @@
 			});
 
 		await Timeline.DrawChart();
+
+		await Create3ColumnsTimeline();
+	}
+
+	private async Task Create3ColumnsTimeline()
+	{
+		TimelineWith3Columns = await DataTable<DataTableTimeLineRow>.CreateAsync(jsRuntime, "smalltimeline");
+
+		TimelineWith3Columns.AddColumn("string", "President");
+		TimelineWith3Columns.AddColumn("date", "Start");
+		TimelineWith3Columns.AddColumn("date", "End");
+
+		await TimelineWith3Columns.AddOptions(new TimelineOptions
+			{
+				Height = 300,
+				Timeline = new Timeline { ColorByRowLabel = true }
+			});
+
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Washington",
+				Start = new DateTime(1789, 3, 30),
+				End = new DateTime(1797, 2, 4)
+			});
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Adams",
+				Start = new DateTime(1797, 2, 4),
+				End = new DateTime(1801, 2, 4)
+			});
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Jefferson",
+				Start = new DateTime(1801, 2, 4),
+				End = new DateTime(1809, 2, 4)
+			});
+
+		await TimelineWith3Columns.DrawChart();
 	}
 
 }
