@@ -4,18 +4,31 @@
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Anton "AnJimoo" Ruvinsky</Authors>
     <Company></Company>
-    <Description>Google Charts Wrapper for .NET ASP.NET projects.
-</Description>
-    <Version>1.0.7</Version>
-    <PackageReleaseNotes>Added onclick return value "name" of timeline chart.
-Added min and max values for timeline. (To change length of timeline) (hAxis class with minValue and maxValue properties)
-</PackageReleaseNotes>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Description>
+      Google Charts Wrapper for Blazor/ASP.NET Core projects
+    </Description>
+    <Version>2.0.0</Version>
+    <PackageReleaseNotes>
+      Breaking changes:
+      1. Instance of DataTable now is created via DataTable.CreateAsync method.
+      2. SetChartId is deleted. (id now must be provided to CreateAsync method)
+      3. GanttChart, TimelineChart components are replaced with GoogleChart component.
+
+      New features:
+      1. .NET 6 compatible.
+      2. Added Columns chart.
+      3. Added GanttOptions, TimelineOptions and ColumnsOptions
+      4. Now supports multiple charts of same type.
+    </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Blazor, GoogleChart, .NET 6</PackageTags>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
-  
+
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
@@ -25,9 +38,17 @@ Added min and max values for timeline. (To change length of timeline) (hAxis cla
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\Nuget\LICENSE.txt">
+    <None Include=".\LICENSE.txt" Pack="true" PackagePath="">
+    </None>
+    <None Include="..\README.md">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
