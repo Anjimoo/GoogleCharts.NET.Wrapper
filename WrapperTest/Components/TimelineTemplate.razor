@@ -9,15 +9,26 @@
 	<div style="margin-top: 50px">
 		<GoogleChart DataTable="@Timeline"></GoogleChart>
 	</div>
+}
 
+@if (@TimelineWith3Columns != null)
+{
 	<div style="margin-top: 50px">
 		<GoogleChart DataTable="@TimelineWith3Columns"></GoogleChart>
+	</div>
+}
+
+@if (@TimelineWithCustomRow != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@TimelineWithCustomRow"></GoogleChart>
 	</div>
 }
 
 @code {
 	public DataTable<DataTableTimeLineRow> Timeline { get; set; }
 	public DataTable<DataTableTimeLineRow> TimelineWith3Columns { get; set; }
+	public DataTable<CustomRow> TimelineWithCustomRow { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -66,6 +77,7 @@
 		await Timeline.DrawChart();
 
 		await Create3ColumnsTimeline();
+		await CreateCustomRowsTimeline();
 	}
 
 	private async Task Create3ColumnsTimeline()
@@ -104,4 +116,45 @@
 		await TimelineWith3Columns.DrawChart();
 	}
 
+	private async Task CreateCustomRowsTimeline()
+	{
+		TimelineWithCustomRow = await DataTable<CustomRow>.CreateAsync(jsRuntime, "customRows");
+
+		TimelineWithCustomRow.AddColumn("string", "Wow");
+		TimelineWithCustomRow.AddColumn("date", "Start");
+		TimelineWithCustomRow.AddColumn("date", "End");
+
+		await TimelineWithCustomRow.AddOptions(new TimelineOptions
+			{
+				Height = 300,
+				Timeline = new Timeline { ColorByRowLabel = true }
+			});
+
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Jackson" },
+					{"Start", new DateTime(1789, 3, 30)},
+					{"End", new DateTime(1797, 2, 4)}
+				}
+			});
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Pipe" },
+					{"Start", new DateTime(1797, 2, 4)},
+					{"End", new DateTime(1801, 4, 12)}
+				}
+			});
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Stark" },
+					{"Start", new DateTime(1801,5, 15)},
+					{"End", new DateTime(1809, 10, 4)}
+				}
+			});
+		Console.WriteLine("DROW CUSTOM ROW");
+		await TimelineWithCustomRow.DrawChart();
+	}
 }

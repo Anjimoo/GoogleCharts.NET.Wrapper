@@ -7,7 +7,8 @@ class Chart {
     dotNetInstance;
     selectEventName;
     disposeDotNet;
-    data = {};
+    columns = [];
+    data = [];
 
     constructor(id) {
         this.id = id;
