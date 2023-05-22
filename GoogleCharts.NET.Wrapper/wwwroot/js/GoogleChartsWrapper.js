@@ -1,23 +1,23 @@
 var charts = {}; //dictionary where key = chartId and value = chart Object
 
 class Chart {
-
     options = {};
     chart;
     functionName;
     dotNetInstance;
     selectEventName;
     disposeDotNet;
-    data = {};
+    columns = [];
+    data = [];
 
-    constructor(id){
+    constructor(id) {
         this.id = id;
     }
 }
 
 window.createChart = (id) => {
     charts[id] = new Chart(id);
-}
+};
 
 window.addChartOptions = (data) => {
     charts[data.item1].options = data.item2;
@@ -38,6 +38,10 @@ window.drawGantt = (data) => {
 
     function drawGanttChart() {
         var dt = new google.visualization.DataTable();
+
+        //data.item3.forEach((item) => {
+        //    dt.addColumn({ type: item.item1, id: item.item2 });
+        //});
         dt.addColumn("string", "Task ID");
         dt.addColumn("string", "Task Name");
         dt.addColumn("string", "Resource");
@@ -77,7 +81,9 @@ window.drawGantt = (data) => {
         chart.draw(dt, charts[chartId].options);
 
         function ganttClicked(e) {
-            charts[chartId].dotNetInstance.invokeMethodAsync(charts[chartId].selectEventName);
+            charts[chartId].dotNetInstance.invokeMethodAsync(
+                charts[chartId].selectEventName
+            );
             //charts[chartId].dotNetInstance.dispose();
         }
     }
@@ -94,21 +100,27 @@ window.drawTimeline = (data) => {
         var chart = new google.visualization.Timeline(container);
         var dataTable = new google.visualization.DataTable();
 
-        dataTable.addColumn({ type: "string", id: "Room" });
-        dataTable.addColumn({ type: "string", id: "Name" });
-        dataTable.addColumn({ type: "date", id: "Start" });
-        dataTable.addColumn({ type: "date", id: "End" });
+        data.item3.forEach((item) => {
+            dataTable.addColumn({ type: item.item1, id: item.item2 });
+        });
 
         let receivedLine;
         let receivedLines = [];
 
         charts[data.item1].data.forEach((item) => {
-            receivedLine = [
-                item.room,
-                item.name,
-                new Date(item.start),
-                new Date(item.end),
-            ];
+            receivedLine = [];
+            let counter = 0;
+            for (const property in item) {
+                if(item[property] === null){
+                    continue;
+                }
+                if (data.item3[counter].item1 == "date") {
+                    receivedLine.push(new Date(item[property]));
+                } else {
+                    receivedLine.push(item[property]);
+                }
+                counter++;
+            }
             receivedLines.push(receivedLine);
         });
 
@@ -122,7 +134,10 @@ window.drawTimeline = (data) => {
             }
 
             if (charts[chartId].dotNetInstance != null) {
-                charts[chartId].dotNetInstance.invokeMethodAsync(charts[chartId].selectEventName, item);
+                charts[chartId].dotNetInstance.invokeMethodAsync(
+                    charts[chartId].selectEventName,
+                    item
+                );
             } else {
                 console.error("DotNet reference is null");
             }
