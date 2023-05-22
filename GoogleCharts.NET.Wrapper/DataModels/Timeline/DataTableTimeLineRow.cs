@@ -8,8 +8,8 @@ namespace GoogleCharts.NET.Wrapper.DataModels.Timeline
 {
     public class DataTableTimeLineRow
     {
-        public string Room { get; set; }
-        public string Name { get; set; }
+        public string LineName { get; set; }
+        public string BarName { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
     }

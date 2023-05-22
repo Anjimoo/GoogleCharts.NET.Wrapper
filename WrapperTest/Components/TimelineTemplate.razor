@@ -11,12 +11,33 @@
 	</div>
 }
 
+@if (@TimelineWith3Columns != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@TimelineWith3Columns"></GoogleChart>
+	</div>
+}
+
+@if (@TimelineWithCustomRow != null)
+{
+	<div style="margin-top: 50px">
+		<GoogleChart DataTable="@TimelineWithCustomRow"></GoogleChart>
+	</div>
+}
+
 @code {
 	public DataTable<DataTableTimeLineRow> Timeline { get; set; }
+	public DataTable<DataTableTimeLineRow> TimelineWith3Columns { get; set; }
+	public DataTable<CustomRow> TimelineWithCustomRow { get; set; }
 
 	protected override async Task OnInitializedAsync()
 	{
 		Timeline = await DataTable<DataTableTimeLineRow>.CreateAsync(jsRuntime, "mytimeline");
+
+		Timeline.AddColumn("string", "Room");
+		Timeline.AddColumn("string", "Name");
+		Timeline.AddColumn("date", "Start");
+		Timeline.AddColumn("date", "End");
 
 		await Timeline.AddOptions(new TimelineOptions
 			{
@@ -26,34 +47,114 @@
 
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Name = "Beginning JavaScript",
-				Room = "Magnolia Room",
+				BarName = "Beginning JavaScript",
+				LineName = "Magnolia Room",
 				Start = new DateTime(2014, 8, 21),
 				End = new DateTime(2014, 11, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Magnolia Room",
-				Name = "Intermediate JavaScript",
+				LineName = "Magnolia Room",
+				BarName = "Intermediate JavaScript",
 				Start = new DateTime(2014, 5, 21),
 				End = new DateTime(2014, 8, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Willow Room",
-				Name = "Beginning Google Charts",
+				LineName = "Willow Room",
+				BarName = "Beginning Google Charts",
 				Start = new DateTime(2014, 6, 21),
 				End = new DateTime(2014, 9, 20)
 			});
 		Timeline.AddRow(new DataTableTimeLineRow
 			{
-				Room = "Willow Room",
-				Name = "Advanced Google Charts",
+				LineName = "Willow Room",
+				BarName = "Advanced Google Charts",
 				Start = new DateTime(2014, 3, 21),
 				End = new DateTime(2014, 5, 20)
 			});
 
 		await Timeline.DrawChart();
+
+		await Create3ColumnsTimeline();
+		await CreateCustomRowsTimeline();
 	}
 
+	private async Task Create3ColumnsTimeline()
+	{
+		TimelineWith3Columns = await DataTable<DataTableTimeLineRow>.CreateAsync(jsRuntime, "smalltimeline");
+
+		TimelineWith3Columns.AddColumn("string", "President");
+		TimelineWith3Columns.AddColumn("date", "Start");
+		TimelineWith3Columns.AddColumn("date", "End");
+
+		await TimelineWith3Columns.AddOptions(new TimelineOptions
+			{
+				Height = 300,
+				Timeline = new Timeline { ColorByRowLabel = true }
+			});
+
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Washington",
+				Start = new DateTime(1789, 3, 30),
+				End = new DateTime(1797, 2, 4)
+			});
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Adams",
+				Start = new DateTime(1797, 2, 4),
+				End = new DateTime(1801, 2, 4)
+			});
+		TimelineWith3Columns.AddRow(new DataTableTimeLineRow
+			{
+				BarName = "Jefferson",
+				Start = new DateTime(1801, 2, 4),
+				End = new DateTime(1809, 2, 4)
+			});
+
+		await TimelineWith3Columns.DrawChart();
+	}
+
+	private async Task CreateCustomRowsTimeline()
+	{
+		TimelineWithCustomRow = await DataTable<CustomRow>.CreateAsync(jsRuntime, "customRows");
+
+		TimelineWithCustomRow.AddColumn("string", "Wow");
+		TimelineWithCustomRow.AddColumn("date", "Start");
+		TimelineWithCustomRow.AddColumn("date", "End");
+
+		await TimelineWithCustomRow.AddOptions(new TimelineOptions
+			{
+				Height = 300,
+				Timeline = new Timeline { ColorByRowLabel = true }
+			});
+
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Jackson" },
+					{"Start", new DateTime(1789, 3, 30)},
+					{"End", new DateTime(1797, 2, 4)}
+				}
+			});
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Pipe" },
+					{"Start", new DateTime(1797, 2, 4)},
+					{"End", new DateTime(1801, 4, 12)}
+				}
+			});
+		TimelineWithCustomRow.AddRow(new CustomRow
+			{
+				Row = new Dictionary<string, object> {
+					{"BarName", "Stark" },
+					{"Start", new DateTime(1801,5, 15)},
+					{"End", new DateTime(1809, 10, 4)}
+				}
+			});
+		Console.WriteLine("DROW CUSTOM ROW");
+		await TimelineWithCustomRow.DrawChart();
+	}
 }
