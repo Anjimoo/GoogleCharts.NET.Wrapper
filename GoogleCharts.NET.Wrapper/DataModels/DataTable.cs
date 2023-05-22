@@ -74,12 +74,14 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         public async Task DrawChart()
         {
             //var type = dataTableRaws.First().GetType().ToString();
+            Console.WriteLine(typeof(T).ToString());
             switch (typeof(T).ToString())
             {
                 case "GoogleCharts.NET.Wrapper.DataModels.Gantt.DataTableGanttRow":
                     await _jSRuntime.InvokeVoidAsync("drawGantt", new Tuple<string, object, object>(_id, _dataTableRows, _dataTableColumns));
                     Drawn = true;
                     break;
+                case "GoogleCharts.NET.Wrapper.DataModels.Common.CustomRow":
                 case "GoogleCharts.NET.Wrapper.DataModels.Timeline.DataTableTimeLineRow":
                     await _jSRuntime.InvokeVoidAsync("drawTimeline", new Tuple<string, object, object>(_id, _dataTableRows, _dataTableColumns));
                     Drawn = true;

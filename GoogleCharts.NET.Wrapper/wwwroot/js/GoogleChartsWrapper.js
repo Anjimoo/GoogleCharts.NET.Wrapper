@@ -109,6 +109,9 @@ window.drawTimeline = (data) => {
 
         charts[data.item1].data.forEach((item) => {
             receivedLine = [];
+            if (item['row'] != undefined) {
+                item = item['row'];
+            }
             let counter = 0;
             for (const property in item) {
                 if(item[property] === null){
