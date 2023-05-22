@@ -8,7 +8,17 @@
     }
   },
   "profiles": {
-    "IIS Express": {
+    "IIS Express 6.0": {
+      "targetFramework": "net6.0",
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express 7.0": {
+      "targetFramework": "net7.0",
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {

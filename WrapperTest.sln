@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrapperTest", "WrapperTest\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleCharts.NET.Wrapper", "GoogleCharts.NET.Wrapper\GoogleCharts.NET.Wrapper.csproj", "{24CF1777-ED77-4EAD-A91E-F7D0F5C40FD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrapperTestProject", "WrapperTestProject\WrapperTestProject.csproj", "{7B1F6693-0E1D-45CC-8CC9-F9CDB58E03F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{24CF1777-ED77-4EAD-A91E-F7D0F5C40FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24CF1777-ED77-4EAD-A91E-F7D0F5C40FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24CF1777-ED77-4EAD-A91E-F7D0F5C40FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B1F6693-0E1D-45CC-8CC9-F9CDB58E03F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B1F6693-0E1D-45CC-8CC9-F9CDB58E03F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B1F6693-0E1D-45CC-8CC9-F9CDB58E03F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B1F6693-0E1D-45CC-8CC9-F9CDB58E03F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

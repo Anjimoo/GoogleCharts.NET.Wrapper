@@ -1,19 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Authors>Anton "AnJimoo" Ruvinsky</Authors>
     <Company></Company>
     <Description>
-      Google Charts Wrapper for Blazor/ASP.NET Core projects
+      Google Charts Wrapper for Blazor ASP.NET Core projects
     </Description>
     <Version>2.0.1</Version>
     <PackageReleaseNotes>
+      <!--TODO-->
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Anjimoo/GoogleCharts.NET.Wrapper</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>Blazor, GoogleChart, .NET 6</PackageTags>
+    <PackageTags>Blazor, GoogleChart, .NET 6, .NET 7</PackageTags>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
@@ -24,7 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.1" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.5" Condition="'$(TargetFramework)' == 'net7.0'" />
   </ItemGroup>
 
   <ItemGroup>
