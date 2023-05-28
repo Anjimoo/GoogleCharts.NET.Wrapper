@@ -103,15 +103,31 @@ window.drawTimeline = (data) => {
 
         let receivedLine;
         let receivedLines = [];
-
-        charts[data.item1].data.forEach((item) => {
+        //TODO refactor
+        charts[data.item1].data.every((item) => {
             receivedLine = [];
-            if (item['row'] != undefined) {
-                item = item['row'];
+            if (item['rows'] != undefined) {
+                item['rows'].forEach((row) => {
+                    receivedLine = [];
+                    let counter = 0;
+                    for (const property in row) {
+                        if (row[property] === null) {
+                            continue;
+                        }
+                        if (data.item3[counter].item1 == "date") {
+                            receivedLine.push(new Date(row[property]));
+                        } else {
+                            receivedLine.push(row[property]);
+                        }
+                        counter++;
+                    }
+                    receivedLines.push(receivedLine);
+                });
+                return false;
             }
             let counter = 0;
             for (const property in item) {
-                if(item[property] === null){
+                if (item[property] === null) {
                     continue;
                 }
                 if (data.item3[counter].item1 == "date") {
@@ -122,6 +138,7 @@ window.drawTimeline = (data) => {
                 counter++;
             }
             receivedLines.push(receivedLine);
+            return true;
         });
 
         dataTable.addRows(receivedLines);
@@ -168,7 +185,7 @@ window.drawColumnChart = (data) => {
     }
 };
 
-//Columns Chart
+//Pie Chart
 window.drawPieChart = (data) => {
     charts[data.item1].data = data.item2;
     google.charts.load("current", { packages: ["corechart"] });
@@ -176,12 +193,30 @@ window.drawPieChart = (data) => {
 
     function drawChart() {
         var rows = [];
-        
-        rows.push([data.item3[0].item2, data.item3[1].item2]);
-        
+
+        if (data.item3.length != 0) {
+            rows.push([data.item3[0].item2, data.item3[1].item2]);
+        }
+
         for (var i = 0; i < data.item2.length; i++) {
             rows.push([data.item2[i].label, data.item2[i].value]);
         }
+
+        var dataTable = google.visualization.arrayToDataTable(rows);
+
+        var chart = new google.visualization.PieChart(document.getElementById(data.item1));
+        chart.draw(dataTable, charts[data.item1].options);
+    }
+};
+
+//Custom row Pie Chart
+window.drawCustomRowPieChart = (data) => {
+    charts[data.item1].data = data.item2;
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var rows = data.item2[0].rows;
 
         var dataTable = google.visualization.arrayToDataTable(rows);
 

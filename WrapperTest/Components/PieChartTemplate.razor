@@ -1,4 +1,5 @@
 ﻿@using GoogleCharts.NET.Wrapper.DataModels.Common
+@using GoogleCharts.NET.Wrapper.DataModels.Contracts;
 @using Microsoft.JSInterop;
 @inject IJSRuntime jsRuntime;
 
@@ -10,9 +11,16 @@
         <GoogleChart DataTable="@PieChart"></GoogleChart>
     </div>
 }
+@if (@CustomRowPieChart != null)
+{
+    <div style="margin-top: 50px">
+        <GoogleChart DataTable="@CustomRowPieChart"></GoogleChart>
+    </div>
+}
 
 @code {
     public DataTable<DataTablePieRow> PieChart { get; set; }
+    public DataTable<CustomRow> CustomRowPieChart { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,7 +32,7 @@
                 Width = 600,
                 Title = "My Pie Chart"
             });
-        
+
         PieChart.AddColumn("string", "Pizza");
         PieChart.AddColumn("number", "Popularity");
 
@@ -61,5 +69,55 @@
         await PieChart.DrawChart();
 
         StateHasChanged();
+
+        await CreateCustomRowsPieChart();
+    }
+
+    private async Task CreateCustomRowsPieChart()
+    {
+        CustomRowPieChart = await DataTable<CustomRow>.CreateAsync(jsRuntime, "customRowsPieChart");
+
+        await CustomRowPieChart.AddOptions(new PieChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Custom Row Pie Chart"
+            });
+
+        CustomRowPieChart.AddRow(
+            new CustomRow
+                {
+                    Rows = new List<List<object>>
+                    {
+                    new List<object>
+                    {
+                        "Pizza",
+                        "Popularity"
+                    },
+                    new List<object>
+                    {
+                        "Pepperoni",
+                        23
+                    },
+                    new List<object>
+                    {
+                        "Hawaiian",
+                        26
+                    },
+                    new List<object>
+                    {
+                        "Mushroom",
+                        33
+                    },
+                    new List<object>
+                    {
+                        "Sausage",
+                        3
+                    }
+                    }
+
+                });
+
+        await CustomRowPieChart.DrawChart(ChartTypes.PieChart);
     }
 }

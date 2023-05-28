@@ -17,6 +17,7 @@
     <PackageTags>Blazor, GoogleChart, .NET 6, .NET 7</PackageTags>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
 
