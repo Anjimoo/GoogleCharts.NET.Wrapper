@@ -4,6 +4,7 @@ Available charts :
 - Timeline
 - Gantt
 - Columns
+- Pie
 
 ## How to start :
 
