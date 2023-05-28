@@ -40,10 +40,11 @@ namespace GoogleCharts.NET.Wrapper.DataModels
         /// <param name="jSRuntime"></param>
         /// <param name="id">Chart ID</param>
         /// <returns></returns>
-        public static Task<DataTable<T>> CreateAsync(IJSRuntime jSRuntime, string id)
+        public static async Task<DataTable<T>> CreateAsync(IJSRuntime jSRuntime, string id)
         {
             var ret = new DataTable<T>(jSRuntime, id);
-            return ret.InitializeAsync();
+            await ret.InitializeAsync();
+            return ret;
         }
 
         private async Task<DataTable<T>> InitializeAsync()
