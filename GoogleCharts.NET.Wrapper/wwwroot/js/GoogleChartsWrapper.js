@@ -39,9 +39,6 @@ window.drawGantt = (data) => {
     function drawGanttChart() {
         var dt = new google.visualization.DataTable();
 
-        //data.item3.forEach((item) => {
-        //    dt.addColumn({ type: item.item1, id: item.item2 });
-        //});
         dt.addColumn("string", "Task ID");
         dt.addColumn("string", "Task Name");
         dt.addColumn("string", "Resource");
