@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GoogleCharts.NET.Wrapper.DataModels.Pie
+﻿namespace GoogleCharts.NET.Wrapper.DataModels.Pie
 {
     public class DataTablePieRow
     {
+        public string Label { get; set; }
+        public double Value { get; set; }
     }
 }

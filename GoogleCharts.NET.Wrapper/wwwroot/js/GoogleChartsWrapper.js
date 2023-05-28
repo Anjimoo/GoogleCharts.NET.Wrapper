@@ -39,9 +39,6 @@ window.drawGantt = (data) => {
     function drawGanttChart() {
         var dt = new google.visualization.DataTable();
 
-        //data.item3.forEach((item) => {
-        //    dt.addColumn({ type: item.item1, id: item.item2 });
-        //});
         dt.addColumn("string", "Task ID");
         dt.addColumn("string", "Task Name");
         dt.addColumn("string", "Resource");
@@ -167,6 +164,28 @@ window.drawColumnChart = (data) => {
         var chart = new google.visualization.ColumnChart(
             document.getElementById(data.item1)
         );
+        chart.draw(dataTable, charts[data.item1].options);
+    }
+};
+
+//Columns Chart
+window.drawPieChart = (data) => {
+    charts[data.item1].data = data.item2;
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var rows = [];
+        
+        rows.push([data.item3[0].item2, data.item3[1].item2]);
+        
+        for (var i = 0; i < data.item2.length; i++) {
+            rows.push([data.item2[i].label, data.item2[i].value]);
+        }
+
+        var dataTable = google.visualization.arrayToDataTable(rows);
+
+        var chart = new google.visualization.PieChart(document.getElementById(data.item1));
         chart.draw(dataTable, charts[data.item1].options);
     }
 };

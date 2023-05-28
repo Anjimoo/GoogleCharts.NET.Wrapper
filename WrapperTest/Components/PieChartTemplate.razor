@@ -1,0 +1,65 @@
+﻿@using GoogleCharts.NET.Wrapper.DataModels.Common
+@using Microsoft.JSInterop;
+@inject IJSRuntime jsRuntime;
+
+<h3>PieChartTemplate</h3>
+
+@if (@PieChart != null)
+{
+    <div style="margin-top: 50px">
+        <GoogleChart DataTable="@PieChart"></GoogleChart>
+    </div>
+}
+
+@code {
+    public DataTable<DataTablePieRow> PieChart { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        PieChart = await DataTable<DataTablePieRow>.CreateAsync(jsRuntime, "mypie");
+
+        await PieChart.AddOptions(new PieChartOptions
+            {
+                Height = 400,
+                Width = 600,
+                Title = "My Pie Chart"
+            });
+        
+        PieChart.AddColumn("string", "Pizza");
+        PieChart.AddColumn("number", "Popularity");
+
+        PieChart.AddRow(new DataTablePieRow
+            {
+                Label = "Pepperoni",
+                Value = 33
+            });
+
+        PieChart.AddRow(new DataTablePieRow
+            {
+                Label = "Hawaiian",
+                Value = 26
+            });
+
+        PieChart.AddRow(new DataTablePieRow
+            {
+                Label = "Mushroom",
+                Value = 22
+            });
+
+        PieChart.AddRow(new DataTablePieRow
+            {
+                Label = "Sausage",
+                Value = 10
+            });
+
+        PieChart.AddRow(new DataTablePieRow
+            {
+                Label = "Anchovies",
+                Value = 9
+            });
+
+        await PieChart.DrawChart();
+
+        StateHasChanged();
+    }
+}
